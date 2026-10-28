@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cinecali</title>
+    <!-- Vinculamos la pinta visual y el diseño que está en el CSS -->
+    <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+
+    <!-- ========================================================= -->
+    <!-- PESTAÑA DE LOGIN (El retén de entrada al chuzo)           -->
+    <!-- ========================================================= -->
+    <div id="pestana-login" class="pantalla activa">
+        <div class="caja-login-split">
+            <!-- Columna izquierda: La imagen bacana de bienvenida con el logo -->
+            <div class="columna-imagen">
+                <img src="1.jpg" alt="Logo" class="logo-login">
+                <p>Cinecali</p>
+            </div>
+            
+            <!-- Columna derecha: Formulario donde el usuario mete sus datos pa' pasar -->
+            <div class="columna-form">
+                <h2>INICIO DE SESIÓN</h2>
+                <input type="text" id="usuario" placeholder="Usuario" maxlength="30" oninput="validarSoloTexto(this, 30)">
+                <input type="password" id="password" placeholder="Contraseña">
+                <button onclick="ingresar()">INGRESAR</button>
+                
+                <!-- Aquí sale el brinco si la clave o el usuario están pálidos -->
+                <p id="msj-error-login" class="mensaje-error"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- PANEL PRINCIPAL (La pista dura donde corre todo el sistema)-->
+    <!-- ========================================================= -->
+    <div id="panel-principal" class="pantalla oculta">
+        <!-- Encabezado con el menú de botones pa' saltar de pestaña -->
+        <header class="encabezado">
+            <h1>Panel de Control - Cinecali</h1>
+            <nav class="menu-navegacion">
+                <button class="btn-tab activo" onclick="cambiarPestana('taquilla')">Taquilla</button>
+                <button class="btn-tab" onclick="cambiarPestana('asientos')">Asientos</button>
+                <button class="btn-tab" onclick="cambiarPestana('reportes')">Reportes</button>
+                <button class="btn-salir" onclick="cerrarSesion()">Salir</button>
+            </nav>
+        </header>
+
+        <main class="contenido-panel">
+
+            <!-- ----------------------------------------------------- -->
+            <!-- MÓDULO 1: TAQUILLA (Donde entra la platica y se registran boletas) -->
+            <!-- ----------------------------------------------------- -->
+            <section id="modulo-taquilla" class="seccion-tab activa">
+                <h2>Registro de Taquilla</h2>
+                <div class="tarjeta">
+                    <!-- Casilla de cédula o ID (Máximo 10 números, sin letras) -->
+                    <input type="text" id="usuario-id" placeholder="Identificación" maxlength="10" oninput="validarSoloNumerosEnteros(this, 10)">
+                    
+                    <!-- Casilla para el nombre del cliente (Máximo 30 letras, sin números) -->
+                    <input type="text" id="cliente-nombre" placeholder="Nombre del Cliente" maxlength="30" oninput="validarSoloTexto(this, 30)">
+                    
+                    <!-- Casilla de la película (Máximo 30 letras, nada de números ni símbolos) -->
+                    <input type="text" id="peli-nombre" placeholder="Nombre de la Película" maxlength="30" oninput="validarSoloTexto(this, 30)">
+                    
+                    <!-- Campo de la Sala con su respectiva burbuja de ayuda flotante (Solo del 1 al 5) -->
+                    <div class="contenedor-input-ayuda">
+                        <input type="text" id="peli-sala" placeholder="Sala" maxlength="1" onfocus="mostrarAyuda('ayuda-sala')" onblur="ocultarAyuda('ayuda-sala')" oninput="validarSalaCinco(this)">
+                        <div id="ayuda-sala" class="burbuja-ayuda oculta">Solo existen 5 salas disponibles (1, 2, 3, 4 y 5).</div>
+                    </div>
+
+                    <!-- Cantidad de boletas y precio unitario en Pesos Colombianos -->
+                    <input type="text" id="cant-boletas" placeholder="Cantidad de Boletas" maxlength="3" oninput="validarSoloNumerosEnteros(this, 3)">
+                    <input type="text" id="precio-boleta" value="$ 12.000 COP" readonly>
+
+                    <button onclick="procesarTaquilla()">Calcular Recaudación</button>
+
+                    <!-- Animación tipo reloj con barra de progreso mientras procesa -->
+                    <div id="caja-reloj" class="caja-reloj oculta">
+                        <div class="icono-reloj">⏱️</div>
+                        <p>Procesando pago y generando boleto...</p>
+                        <div class="barra-progreso"><div id="progreso-reloj"></div></div>
+                    </div>
+
+                    <!-- Cuadro con el billete total calculado -->
+                    <div id="caja-resultado" class="caja-resultado oculta">
+                        <h3>Recaudación Total:</h3>
+                        <p id="monto-recaudado" class="resaltado">$ 0 COP</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ----------------------------------------------------- -->
+            <!-- MÓDULO 2: CAMBIO DE ASIENTOS (Ubicación de sillas A, B, C) -->
+            <!-- ----------------------------------------------------- -->
+            <section id="modulo-asientos" class="seccion-tab oculta">
+                <h2>Cambio de Asientos</h2>
+                <div class="tarjeta">
+                    <p class="nota-info">Recargo del 5% entre las 15:00 y las 18:00 (Moneda: COP).</p>
+                    
+                    <!-- Asiento actual con burbuja de ayuda sobre el formato permitido -->
+                    <div class="contenedor-input-ayuda">
+                        <input type="text" id="asiento-actual" placeholder="Ubicación Asiento Actual:" maxlength="4" onfocus="mostrarAyuda('ayuda-asiento-actual')" onblur="ocultarAyuda('ayuda-asiento-actual')" oninput="validarFormatoAsiento(this)">
+                        <div id="ayuda-asiento-actual" class="burbuja-ayuda oculta">Se permiten unicamente letras A, B o C y numeracion del 1 al 100.</div>
+                    </div>
+
+                    <!-- Asiento nuevo con burbuja de ayuda -->
+                    <div class="contenedor-input-ayuda">
+                        <input type="text" id="asiento-nuevo" placeholder="Ubicación Asiento Nuevo:" maxlength="4" onfocus="mostrarAyuda('ayuda-asiento-nuevo')" onblur="ocultarAyuda('ayuda-asiento-nuevo')" oninput="validarFormatoAsiento(this)">
+                        <div id="ayuda-asiento-nuevo" class="burbuja-ayuda oculta">Se permiten unicamente letras A, B o C y numeracion del 1 al 100.</div>
+                    </div>
+
+                    <button onclick="procesarCambioAsiento()">Procesar Cambio</button>
+
+                    <!-- Resultado con la tarifa final y el recargo si aplica -->
+                    <div id="resultado-asiento" class="caja-resultado oculta">
+                        <p id="detalle-asiento"></p>
+                        <p id="costo-asiento" class="resaltado"></p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ----------------------------------------------------- -->
+            <!-- MÓDULO 3: REPORTES Y CÁMARA (Estadísticas y fotico)       -->
+            <!-- ----------------------------------------------------- -->
+            <section id="modulo-reportes" class="seccion-tab oculta">
+                <h2>Reportes y Control</h2>
+                <div class="grid-reportes">
+                    <!-- Cuadro de la gráfica trazada en canvas -->
+                    <div class="tarjeta">
+                        <h3>Gráfica de Ingresos (COP)</h3>
+                        <canvas id="grafica-lineas" width="350" height="200"></canvas>
+                    </div>
+                    <!-- Cuadro de la cámara y botones de foto -->
+                    <div class="tarjeta">
+                        <h3>Cámara</h3>
+                        <div class="caja-camara">
+                            <video id="video-camara" autoplay playsinline></video>
+                            <canvas id="canvas-foto" width="320" height="240" class="oculta"></canvas>
+                        </div>
+                        <button onclick="iniciarCamara()">Activar Cámara</button>
+                        <button onclick="tomarFoto()">Tomar Foto</button>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Cargamos el cerebro en Javascript al final pa' que cargue rápido -->
+    <script src="script.js"></script>
+</body>
+</html>
