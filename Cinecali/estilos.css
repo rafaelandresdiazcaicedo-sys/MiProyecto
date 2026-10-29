@@ -1,6 +1,3 @@
-/* =========================================================
-   ESTILOS GENERALES Y ESTRUCTURA DE LA PÁGINA
-   ========================================================= */
 body {
     font-family: Arial, sans-serif;
     /* Fondo oscuro con imagen B.jpg centrada */
@@ -15,7 +12,6 @@ body {
     align-items: center;
 }
 
-/* Clases para cambiar de estado los módulos */
 .pantalla { 
     width: 100%; 
     display: flex;
@@ -39,9 +35,6 @@ body {
     display: block;
 }
 
-/* =========================================================
-   DISEÑO DEL LOGIN (Caja dividida en dos)
-   ========================================================= */
 #pestana-login {
     display: flex;
     justify-content: center;
@@ -154,9 +147,7 @@ button:hover {
     text-align: center;
 }
 
-/* =========================================================
-   PANEL DE CONTROL PRINCIPAL
-   ========================================================= */
+/* el panel */
 #panel-principal {
     width: 960px;
     max-width: 95%;
@@ -221,9 +212,7 @@ button:hover {
     margin-bottom: 15px;
 }
 
-/* =========================================================
-   ESTILOS PARA LAS BURBUJAS EMERGENTES (TOOLTIPS)
-   ========================================================= */
+/* estilos de las burbujas */
 .contenedor-input-ayuda {
     position: relative;
     width: 100%;
@@ -254,9 +243,7 @@ button:hover {
     border-color: #333 transparent transparent transparent;
 }
 
-/* =========================================================
-   ANIMACIÓN TIPO RELOJ Y RESULTADOS
-   ========================================================= */
+/* animacion del reloj */
 .caja-reloj {
     margin-top: 15px;
     background: #eef6ff;
