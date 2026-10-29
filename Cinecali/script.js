@@ -5,9 +5,9 @@ let tarifaBaseCOP = 12000;
 // Variable pa' controlar el flujo de la cámara
 let streamCamara = null;
 
-// =========================================================
-// BURBUJAS DE AYUDA (Muestra u oculta los globitos informativos)
-// =========================================================
+
+// burbujas de ayuda
+
 function mostrarAyuda(id) {
     // Le quitamos la clase oculta pa' que aparezca sobre el input
     document.getElementById(id).classList.remove("oculta");
@@ -20,11 +20,11 @@ function ocultarAyuda(id) {
     }, 200);
 }
 
-// =========================================================
-// RESTRICCIONES Y FILTROS EN TIEMPO REAL (Filtra lo que digita el usuario)
-// =========================================================
 
-// Limpia cualquier número o símbolo raro y frena el texto en el límite indicado
+// limite de d¿registro de usuario
+
+
+// Limpia cualquier número o símbolo raro y frena texto
 function validarSoloTexto(elemento, max) {
     elemento.value = elemento.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
     if (elemento.value.length > max) {
@@ -32,7 +32,7 @@ function validarSoloTexto(elemento, max) {
     }
 }
 
-// Permite únicamente dígitos numéricos enteros (nada de puntos, comas o letras)
+// Permite únicamente dígitos numéricos enteros ,nada de puntos, comas o letras.
 function validarSoloNumerosEnteros(elemento, max) {
     elemento.value = elemento.value.replace(/[^0-9]/g, '');
     if (elemento.value.length > max) {
@@ -79,9 +79,8 @@ function validarFormatoAsiento(elemento) {
     elemento.value = letra + numeros;
 }
 
-// =========================================================
-// LOG IN Y CONTROL DE NAVEGACIÓN ENTRE PESTAÑAS
-// =========================================================
+
+// navegacion de pestañas cambio
 function ingresar() {
     let u = document.getElementById("usuario").value.trim();
     let p = document.getElementById("password").value.trim();
@@ -135,9 +134,9 @@ function cambiarPestana(modulo) {
     }
 }
 
-// =========================================================
-// MÓDULO TAQUILLA (Cálculo de boletas + Animación tipo reloj)
-// =========================================================
+
+// Cálculo de boletas + Animación tipo reloj
+
 function procesarTaquilla() {
     let idUser = document.getElementById("usuario-id").value.trim();
     let cliente = document.getElementById("cliente-nombre").value.trim();
@@ -212,9 +211,9 @@ function procesarTaquilla() {
     }, 150);
 }
 
-// =========================================================
-// MÓDULO CAMBIO DE ASIENTOS (Recargo automático por hora actual)
-// =========================================================
+
+// cambio de asientos y Recargo automático por hora actual
+
 function procesarCambioAsiento() {
     let actual = document.getElementById("asiento-actual").value.trim();
     let nuevo = document.getElementById("asiento-nuevo").value.trim();
@@ -222,7 +221,7 @@ function procesarCambioAsiento() {
     let detalle = document.getElementById("detalle-asiento");
     let costo = document.getElementById("costo-asiento");
 
-    // Expresión regular pa' comprobar que sea A, B o C seguido de un número de 1 a 100
+    // Expresión regular pa comprobar que sea A, B o C seguido de un número de 1 a 100
     let regexAsiento = /^[A-C]([1-9][0-9]?|100)$/;
 
     if (!regexAsiento.test(actual) || !regexAsiento.test(nuevo)) {
@@ -230,7 +229,7 @@ function procesarCambioAsiento() {
         return;
     }
 
-    // Consulta la hora del equipo pa' saber si mete recargo
+    // Consulta la hora del equipo pa saber si mete recargo
     let horaActual = new Date().getHours();
     let costoFinalCOP = tarifaBaseCOP;
     let mensaje = "Horario regular (Sin recargo)";
@@ -245,9 +244,9 @@ function procesarCambioAsiento() {
     cajaRes.classList.remove("oculta");
 }
 
-// =========================================================
-// REPORTES (Gráfica lineal en Canvas) Y WEBCAM
-// =========================================================
+
+// reportes Gráfica lineal en Canvas y la camara
+
 function dibujarGrafica() {
     let canvas = document.getElementById("grafica-lineas");
     let ctx = canvas.getContext("2d");
